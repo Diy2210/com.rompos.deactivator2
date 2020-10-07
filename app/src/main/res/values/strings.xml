@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">KotlinMPP</string>
+    <string name="app_name">com.rompos.deactivator2</string>
     <string name="server_title">Server Title</string>
     <string name="server_url">Server URL</string>
     <string name="server_token">Authorization Token</string>
@@ -13,4 +13,7 @@
     <string name="delete_item">Delete Item</string>
     <string name="deleted">Item have been deleted</string>
     <string name="confirm_delete">Do you want to delete this item?\n%s</string>
+    <string name="server_error">Server error</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
