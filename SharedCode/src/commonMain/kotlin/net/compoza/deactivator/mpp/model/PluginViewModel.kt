@@ -4,12 +4,9 @@ import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import net.compoza.deactivator.db.Server
 import net.compoza.deactivator.mpp.api.PluginDeactivatorApi
 
 class PluginViewModel : ViewModel() {
-    lateinit var url: String
-    lateinit var token: String
 
     private val client = PluginDeactivatorApi()
     lateinit var resp: PluginResponseModel
@@ -17,12 +14,15 @@ class PluginViewModel : ViewModel() {
     var list: List<PluginModel> = emptyList()
     private val _plugins: MutableLiveData<List<PluginModel>> = MutableLiveData(list)
 
+    var status: String = "Loading"
+    val _status: MutableLiveData<String> = MutableLiveData(status)
+
     private val _pluginsMutableLiveData: MutableLiveData<List<PluginModel>> =
         MutableLiveData(initialValue = List(1) {
             PluginModel(
                 "Loading",
                 "Loading",
-                true
+                false
             )
         })
 
@@ -41,13 +41,20 @@ class PluginViewModel : ViewModel() {
                         resp = Json.decodeFromString(PluginResponseModel.serializer(), response)
                         if (resp.success) {
                             pluginList.value = resp.data
+                            _status.value = "Success"
                         } else {
                             print("Error")
+                            _status.value = "Error"
                         }
                     }
             } catch (e: Exception) {
                 println("Server Error$e")
+                _status.value = "Error"
             }
         }
+    }
+
+    fun getStatus(): MutableLiveData<String> {
+        return _status
     }
 }

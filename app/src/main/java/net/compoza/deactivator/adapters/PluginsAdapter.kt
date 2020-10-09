@@ -26,7 +26,6 @@ class PluginsAdapter(
     }
 
     override fun onBindViewHolder(holder: ItemTableViewHolder, position: Int) {
-//        holder.bind(items[position])
         holder.bind(items.value[position])
     }
 

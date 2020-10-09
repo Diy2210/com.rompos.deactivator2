@@ -1,5 +1,6 @@
 package net.compoza.deactivator.fragments
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -26,6 +27,7 @@ class PluginFragment : Fragment() {
     lateinit var token: String
     lateinit var adapter: PluginsAdapter
 
+    @SuppressLint("ShowToast")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,7 +36,10 @@ class PluginFragment : Fragment() {
         adapter = PluginsAdapter(model.pluginList)
         val view = inflater.inflate(R.layout.fragment_plugin, container, false)
 
-        if (arguments?.getString("TITLE") != null && arguments?.getString("URL") != null && arguments?.getString("TOKEN") != null) {
+        if (arguments?.getString("TITLE") != null && arguments?.getString("URL") != null && arguments?.getString(
+                "TOKEN"
+            ) != null
+        ) {
             title = arguments?.getString("TITLE")!!
             url = arguments?.getString("URL")!!
             token = arguments?.getString("TOKEN")!!
@@ -63,20 +68,31 @@ class PluginFragment : Fragment() {
             }
         })
 
-        lifecycleScope.launch {
-            view.progressBar.visibility = View.VISIBLE
-            try {
-                model.launchAsyncRequest(url, token)
-            } catch (e: Exception) {
-                Toast.makeText(context, e.message.toString(), Toast.LENGTH_SHORT).show()
+        getPlugins()
+
+        model.getStatus().addObserver {
+            view.plugins.adapter = adapter
+            view.progressBar.visibility = View.GONE
+            if (model._status.value == "Error") {
                 toMain()
-            } finally {
-                view.progressBar.visibility = View.GONE
-                view.plugins.adapter = adapter
+                Toast.makeText(context, getString(R.string.server_error), Toast.LENGTH_SHORT).show()
             }
         }
+//        view.pluginState.setOnCheckedChangeListener { _, isChecked ->
+//            val message = if (isChecked) "Switch1:ON" else "Switch1:OFF"
+//            println(message)
+//        }
 
         return view
+    }
+
+    private fun getPlugins() {
+        try {
+            model.launchAsyncRequest(url, token)
+        } catch (e: Exception) {
+            Toast.makeText(context, e.message.toString(), Toast.LENGTH_SHORT).show()
+            toMain()
+        }
     }
 
     private fun toMain() {

@@ -42,7 +42,6 @@ class PluginDeactivatorApi() {
         return client.get("${url}/wp-json/deactivator/v1/list?token=${token}")
     }
 
-
 //    suspend fun updatePluginStatus(pluginModel: PluginModel, state: Boolean): String {
 //        var status: String = "deactivate"
 //        if (state) {
