@@ -4,6 +4,7 @@ import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import net.compoza.deactivator.db.Server
 import net.compoza.deactivator.mpp.api.PluginDeactivatorApi
 
 class PluginViewModel : ViewModel() {
@@ -12,7 +13,7 @@ class PluginViewModel : ViewModel() {
     lateinit var resp: PluginResponseModel
 
     var list: List<PluginModel> = emptyList()
-    private val _plugins: MutableLiveData<List<PluginModel>> = MutableLiveData(list)
+    val _plugins: MutableLiveData<List<PluginModel>> = MutableLiveData(list)
 
     var status: String = "Loading"
     val _status: MutableLiveData<String> = MutableLiveData(status)
@@ -33,22 +34,21 @@ class PluginViewModel : ViewModel() {
         return _plugins
     }
 
-    fun launchAsyncRequest(url: String, token: String) {
+    fun launchAsyncRequest(server: Server) {
         viewModelScope.launch {
             try {
-                client.getPluginsList(url, token)
+                client.getPluginsList(server)
                     .also { response ->
                         resp = Json.decodeFromString(PluginResponseModel.serializer(), response)
                         if (resp.success) {
                             pluginList.value = resp.data
                             _status.value = "Success"
                         } else {
-                            print("Error")
                             _status.value = "Error"
                         }
                     }
             } catch (e: Exception) {
-                println("Server Error$e")
+                println("Server Error: $e")
                 _status.value = "Error"
             }
         }
@@ -56,5 +56,15 @@ class PluginViewModel : ViewModel() {
 
     fun getStatus(): MutableLiveData<String> {
         return _status
+    }
+
+    fun setStatus(server: Server, model: PluginModel) {
+        viewModelScope.launch {
+            try {
+                client.updatePluginStatus(server, model, model.status.not())
+            } catch (e: Exception) {
+                println("Server Error: $e")
+            }
+        }
     }
 }

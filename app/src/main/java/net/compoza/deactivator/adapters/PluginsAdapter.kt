@@ -5,9 +5,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.jetbrains.handson.mpp.mobile.databinding.PluginListItemBinding
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
+import net.compoza.deactivator.db.Server
+import net.compoza.deactivator.fragments.PluginFragment
 import net.compoza.deactivator.mpp.model.PluginModel
+import net.compoza.deactivator.mpp.model.PluginViewModel
 
 class PluginsAdapter(
+    var server: Server,
     var items: MutableLiveData<List<PluginModel>>
 ) : RecyclerView.Adapter<PluginsAdapter.ItemTableViewHolder>() {
 
@@ -32,6 +36,8 @@ class PluginsAdapter(
     inner class ItemTableViewHolder(private val binding: PluginListItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: PluginModel) {
             binding.item = item
+            binding.server = server
+            binding.handler = PluginViewModel()
             binding.executePendingBindings()
         }
     }

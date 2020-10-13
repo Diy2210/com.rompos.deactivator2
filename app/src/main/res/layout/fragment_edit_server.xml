@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data><variable
+    <data>
+        <variable
             name="item"
             type="net.compoza.deactivator.mpp.model.ServerFormViewModel" />
     </data>

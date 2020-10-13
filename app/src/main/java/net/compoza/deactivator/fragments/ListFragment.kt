@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
@@ -22,7 +23,7 @@ open class ListFragment : Fragment() {
     lateinit var adapter: ServersAdapter
 
     val bundle = Bundle()
-    var model = ListViewModel()
+    var viewModel = ListViewModel()
     val editServerFragment = EditServerFragment()
     val pluginFragment = PluginFragment()
 
@@ -30,20 +31,18 @@ open class ListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        model = ViewModelProviders.of(this).get(ListViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(ListViewModel::class.java)
         val view = inflater.inflate(R.layout.fragment_list, container, false)
 
         lifecycleScope.launch {
             view.progressBar.visibility = View.VISIBLE
-            model.getInitList()
+            viewModel.getInitList()
         }.also {
             adapter = ServersAdapter(
-                model.list,
+                viewModel.list,
                 object : ServersAdapter.ClickCallback {
                     override fun onItemClicked(item: Server) {
-                        bundle.putString("TITLE", item.title)
-                        bundle.putString("URL", item.url)
-                        bundle.putString("TOKEN", item.token)
+                        bundle.putLong("ID", item.ID)
                         pluginFragment.arguments = bundle
                         transaction = activity!!.supportFragmentManager.beginTransaction()
                         transaction.replace(R.id.fragment_list_view, pluginFragment)
@@ -72,9 +71,10 @@ open class ListFragment : Fragment() {
                             .setTitle(getString(R.string.confirm_delete, item.title))
                             .setCancelable(true)
                             .setPositiveButton(R.string.yes) { _, _ ->
-                                model.delete(item)
-                                model.reload()
+                                viewModel.delete(item)
+                                viewModel.reload()
                                 adapter.notifyDataSetChanged()
+                                Toast.makeText(context, getString(R.string.deleted), Toast.LENGTH_LONG).show()
                             }
                             .setNegativeButton(R.string.no) { _, _ ->
                                 // nothing to do
@@ -87,13 +87,13 @@ open class ListFragment : Fragment() {
             view.progressBar.visibility = View.GONE
         }
 
-        model.getInitList().addObserver {
+        viewModel.getInitList().addObserver {
             adapter.refreshList(it)
         }
 
         view.swipeContainer.setOnRefreshListener {
-            model.reload()
-            adapter.items = model.list
+            viewModel.reload()
+            adapter.items = viewModel.list
             adapter.notifyDataSetChanged()
             if (view.swipeContainer.isRefreshing) {
                 view.swipeContainer.isRefreshing = false

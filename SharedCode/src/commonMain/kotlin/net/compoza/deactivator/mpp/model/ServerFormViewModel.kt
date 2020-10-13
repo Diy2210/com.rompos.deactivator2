@@ -1,11 +1,7 @@
 package net.compoza.deactivator.mpp.model
 
-//import androidx.databinding.BaseObservable
-//import androidx.databinding.Bindable
 import net.compoza.deactivator.db.Server
 
-
-//class ServerFormViewModel : BaseObservable() {
 class ServerFormViewModel() {
     private var serverModel = ServerViewModel()
 
@@ -13,14 +9,12 @@ class ServerFormViewModel() {
         serverModel.setModel(server)
     }
 
-//    @Bindable
     fun getTitle() : String {
         return serverModel.title ?: ""
     }
 
     fun setTitle(value: String) {
         serverModel.title = value
-//        notifyChange()
     }
 
 //    @Bindable
@@ -30,17 +24,14 @@ class ServerFormViewModel() {
 
     fun setUrl(value: String) {
         serverModel.url = value
-//        notifyChange()
     }
 
-//    @Bindable
     fun getToken() : String {
         return serverModel.token ?: ""
     }
 
     fun setToken(value: String) {
         serverModel.token = value
-//        notifyChange()
     }
 
     fun isFormValid() : Boolean {

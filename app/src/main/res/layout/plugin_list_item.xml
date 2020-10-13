@@ -3,12 +3,21 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <variable name="item" type="net.compoza.deactivator.mpp.model.PluginModel"/>
+        <variable
+            name="server"
+            type="net.compoza.deactivator.db.Server"/>
+        <variable
+            name="item"
+            type="net.compoza.deactivator.mpp.model.PluginModel"/>
+        <variable
+            name="handler"
+            type="net.compoza.deactivator.mpp.model.PluginViewModel"/>
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        tools:ignore="UseSwitchCompatOrMaterialXml">
 
         <TextView
             android:id="@+id/pluginTitle"
@@ -33,7 +42,7 @@
             android:layout_marginBottom="8dp"
             android:width="80sp"
             android:checked="@{item.status}"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
+            android:onClick="@{() -> handler.setStatus(server, item)}"/>
     </RelativeLayout>
 
 </layout>
