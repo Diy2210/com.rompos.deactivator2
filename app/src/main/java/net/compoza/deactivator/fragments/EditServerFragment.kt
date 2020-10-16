@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
 import com.jetbrains.handson.mpp.mobile.R
 import net.compoza.deactivator.activities.MainViewActivity
@@ -23,8 +25,7 @@ import org.kodein.di.erased.instance
 const val EDIT_MODEL = "editModel"
 const val EDIT_MODEL_ID = "editModelId"
 
-class EditServerFragment : Fragment() {
-
+open class EditServerFragment : Fragment() {
     private val repository: ServersRepository by myApp.kodein.instance()
     private var serverFormViewModel = ServerFormViewModel()
     private var serverId: Long = 0
@@ -45,6 +46,11 @@ class EditServerFragment : Fragment() {
 
         if (arguments?.getLong("ID") != null) {
             serverId = arguments?.getLong("ID")!!
+        }
+
+        // Set title
+        if (activity is AppCompatActivity) {
+            (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.edit_server)
         }
 
         if (serverId > 0) {
