@@ -58,10 +58,10 @@ class PluginViewModel : ViewModel() {
         return _status
     }
 
-    fun setStatus(server: Server, model: PluginModel) {
+    fun setStatus(server: Server, model: PluginModel, state: Boolean) {
         viewModelScope.launch {
             try {
-                client.updatePluginStatus(server, model, model.status.not())
+                client.updatePluginStatus(server, model, state)
             } catch (e: Exception) {
                 println("Server Error: $e")
             }

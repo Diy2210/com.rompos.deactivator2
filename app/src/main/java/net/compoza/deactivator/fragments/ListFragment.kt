@@ -81,8 +81,8 @@ open class ListFragment : Fragment() {
                             }
                             .show()
                     }
-                }
-            )
+                })
+
             view.servers_item.adapter = adapter
             view.progressBar.visibility = View.GONE
         }

@@ -2,11 +2,15 @@ package net.compoza.deactivator.mpp.model
 
 import net.compoza.deactivator.db.Server
 
-class ServerFormViewModel() {
+class ServerFormViewModel {
     private var serverModel = ServerViewModel()
 
     fun setForm(server: Server) {
         serverModel.setModel(server)
+    }
+
+    fun setForm(viewModel: ServerViewModel) {
+        serverModel = viewModel
     }
 
     fun getTitle() : String {
@@ -17,7 +21,6 @@ class ServerFormViewModel() {
         serverModel.title = value
     }
 
-//    @Bindable
     fun getUrl() : String {
         return serverModel.url ?: ""
     }
@@ -40,5 +43,9 @@ class ServerFormViewModel() {
 
     fun getModel(id: Long?) : Server {
         return Server(id!!, serverModel.title, serverModel.url, serverModel.token)
+    }
+
+    fun getModel() : ServerViewModel {
+        return serverModel
     }
 }

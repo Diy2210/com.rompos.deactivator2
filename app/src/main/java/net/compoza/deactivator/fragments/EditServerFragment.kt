@@ -20,6 +20,9 @@ import net.compoza.deactivator.mpp.model.ServerFormViewModel
 import net.compoza.deactivator.mpp.repositories.ServersRepository
 import org.kodein.di.erased.instance
 
+const val EDIT_MODEL = "editModel"
+const val EDIT_MODEL_ID = "editModelId"
+
 class EditServerFragment : Fragment() {
 
     private val repository: ServersRepository by myApp.kodein.instance()
@@ -78,6 +81,21 @@ class EditServerFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putLong(EDIT_MODEL_ID, serverId)
+        outState.putParcelable(EDIT_MODEL, serverFormViewModel.getModel())
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        if (savedInstanceState != null) {
+            serverId = savedInstanceState.getLong(EDIT_MODEL_ID)
+            serverFormViewModel.setForm(savedInstanceState.getParcelable(EDIT_MODEL)!!)
+            println("RESTORED")
+        }
     }
 
     private fun saveRecord(viewModel: ServerFormViewModel) {

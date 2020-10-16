@@ -42,7 +42,7 @@
             android:layout_marginBottom="8dp"
             android:width="80sp"
             android:checked="@{item.status}"
-            android:onClick="@{() -> handler.setStatus(server, item)}"/>
+            android:onCheckedChanged="@{(view, checked) -> handler.setStatus(server, item, checked)}"/>
     </RelativeLayout>
 
 </layout>
