@@ -6,17 +6,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.lifecycleScope
 import com.jetbrains.handson.mpp.mobile.R
 import net.compoza.deactivator.activities.MainViewActivity
 import com.jetbrains.handson.mpp.mobile.databinding.FragmentEditServerBinding
 import kotlinx.android.synthetic.main.fragment_edit_server.*
 import kotlinx.coroutines.launch
+import net.compoza.deactivator.Utils
 import net.compoza.deactivator.mpp.base.myApp
 import net.compoza.deactivator.mpp.model.ServerFormViewModel
 import net.compoza.deactivator.mpp.repositories.ServersRepository
@@ -82,7 +81,7 @@ open class EditServerFragment : Fragment() {
                     toMain()
                 }
             } else {
-                Toast.makeText(context, getString(R.string.error_empty_field), Toast.LENGTH_SHORT).show()
+                Utils.snackMsg(editView, getString(R.string.error_empty_field))
             }
         }
 
@@ -100,7 +99,6 @@ open class EditServerFragment : Fragment() {
         if (savedInstanceState != null) {
             serverId = savedInstanceState.getLong(EDIT_MODEL_ID)
             serverFormViewModel.setForm(savedInstanceState.getParcelable(EDIT_MODEL)!!)
-            println("RESTORED")
         }
     }
 
@@ -110,9 +108,7 @@ open class EditServerFragment : Fragment() {
             repository.save(serverId, viewModel.getModel(serverId))
             toMain()
         } catch (e: Exception) {
-//            Utils.snackMsg(editView, e.message.toString())
-            println(e.message.toString())
-            Toast.makeText(context, e.message.toString(), Toast.LENGTH_SHORT).show()
+            Utils.snackMsg(editView, e.message.toString())
         } finally {
             progressBar.visibility = View.GONE
         }

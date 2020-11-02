@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
@@ -16,14 +15,15 @@ import com.jetbrains.handson.mpp.mobile.R
 import net.compoza.deactivator.activities.MainViewActivity
 import net.compoza.deactivator.adapters.PluginsAdapter
 import kotlinx.android.synthetic.main.fragment_plugin.*
+import kotlinx.android.synthetic.main.fragment_plugin.swipeContainer
 import kotlinx.android.synthetic.main.fragment_plugin.view.*
 import kotlinx.coroutines.launch
+import net.compoza.deactivator.Utils
 import net.compoza.deactivator.db.Server
 import net.compoza.deactivator.mpp.base.myApp
 import net.compoza.deactivator.mpp.model.PluginViewModel
 import net.compoza.deactivator.mpp.repositories.ServersRepository
 import org.kodein.di.instance
-import kotlin.properties.Delegates
 
 class PluginFragment : Fragment() {
 
@@ -88,7 +88,7 @@ class PluginFragment : Fragment() {
             view.plugins.adapter = adapter
             if (viewModel._status.value == "Error") {
                 toMain()
-                Toast.makeText(context, getString(R.string.server_error), Toast.LENGTH_SHORT).show()
+                Utils.snackMsg(plugin_fragment_view, getString(R.string.server_error))
             } else if (viewModel._status.value == "Success") {
                 view.progressBar.visibility = View.GONE
             }
@@ -101,7 +101,7 @@ class PluginFragment : Fragment() {
         try {
             viewModel.launchAsyncRequest(currentServer)
         } catch (e: Exception) {
-            Toast.makeText(context, e.message.toString(), Toast.LENGTH_SHORT).show()
+            Utils.snackMsg(plugin_fragment_view, e.message.toString())
             toMain()
         }
     }

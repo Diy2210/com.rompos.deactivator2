@@ -6,15 +6,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import com.jetbrains.handson.mpp.mobile.R
+import kotlinx.android.synthetic.main.fragment_list.*
 import net.compoza.deactivator.adapters.ServersAdapter
 import kotlinx.android.synthetic.main.fragment_list.view.*
 import kotlinx.coroutines.launch
+import net.compoza.deactivator.Utils
 import net.compoza.deactivator.db.Server
 import net.compoza.deactivator.mpp.model.ListViewModel
 
@@ -74,7 +75,7 @@ open class ListFragment : Fragment() {
                                 viewModel.delete(item)
                                 viewModel.reload()
                                 adapter.notifyDataSetChanged()
-                                Toast.makeText(context, getString(R.string.deleted), Toast.LENGTH_LONG).show()
+                                Utils.snackMsg(fragment_list_view, getString(R.string.deleted))
                             }
                             .setNegativeButton(R.string.no) { _, _ ->
                                 // nothing to do

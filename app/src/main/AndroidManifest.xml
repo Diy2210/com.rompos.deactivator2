@@ -19,7 +19,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="net.compoza.deactivator.activities.MainViewActivity"/>
+        <activity
+            android:name="net.compoza.deactivator.activities.MainViewActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
