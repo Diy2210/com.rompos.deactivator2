@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jetbrains.handson.mpp.mobile.databinding.PluginListItemBinding
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import net.compoza.deactivator.db.Server
-import net.compoza.deactivator.fragments.PluginFragment
 import net.compoza.deactivator.mpp.model.PluginModel
 import net.compoza.deactivator.mpp.model.PluginViewModel
 
