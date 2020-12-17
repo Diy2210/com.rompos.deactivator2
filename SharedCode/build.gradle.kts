@@ -50,7 +50,8 @@ kotlin {
     sourceSets["commonMain"].dependencies {
         api("dev.icerock.moko:mvvm:0.8.1")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-common")
-        implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:1.0-M1-1.4.0-rc")
+//        implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:1.0-M1-1.4.0-rc")
+        implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
         implementation("org.kodein.di:kodein-di:7.1.0")
         implementation("io.ktor:ktor-client-core:1.4.0")
         implementation("com.squareup.sqldelight:runtime:1.4.4")
