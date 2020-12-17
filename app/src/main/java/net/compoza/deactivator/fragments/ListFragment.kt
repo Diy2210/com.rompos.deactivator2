@@ -32,7 +32,6 @@ open class ListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _viewBinding = FragmentListBinding.inflate(inflater, container, false)
         val view = viewBinding.root
 
@@ -111,5 +110,11 @@ open class ListFragment : Fragment() {
             viewBinding.fab.visibility = View.GONE
         }
         return view
+    }
+
+    // Clear View Binding
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _viewBinding = null
     }
 }
