@@ -12,7 +12,6 @@ plugins {
 kotlin {
     android()
 
-    //select iOS target platform depending on the Xcode environment variables
     val iOSTarget: (String, KotlinNativeTarget.() -> Unit) -> KotlinNativeTarget =
         if (System.getenv("SDK_NAME")?.startsWith("iphoneos") == true)
             ::iosArm64
@@ -33,24 +32,9 @@ kotlin {
         }
     }
 
-    //select jvm target platform
-//    jvm("android") {
-//        val main by compilations.getting {
-//            kotlinOptions {
-//                jvmTarget = JavaVersion.VERSION_1_8.toString()
-//            }
-//        }
-//        val test by compilations.getting {
-//            kotlinOptions {
-//                jvmTarget = JavaVersion.VERSION_1_8.toString()
-//            }
-//        }
-//    }
-
     sourceSets["commonMain"].dependencies {
         api("dev.icerock.moko:mvvm:0.8.1")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-common")
-//        implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:1.0-M1-1.4.0-rc")
         implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1")
         implementation("org.kodein.di:kodein-di:7.1.0")
         implementation("io.ktor:ktor-client-core:1.4.0")
@@ -59,11 +43,6 @@ kotlin {
     }
 
     sourceSets["androidMain"].dependencies {
-//        implementation("android.arch.lifecycle:extensions:1.1.1")
-//        implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-//        implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
-//        implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
-
         implementation("org.jetbrains.kotlin:kotlin-stdlib")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
@@ -104,7 +83,6 @@ sqldelight {
 val packForXcode by tasks.creating(Sync::class) {
     group = "build"
 
-    //selecting the right configuration for the iOS framework depending on the Xcode environment variables
     val mode = System.getenv("CONFIGURATION") ?: "DEBUG"
     val framework = kotlin.targets.getByName<KotlinNativeTarget>("ios").binaries.getFramework(mode)
 

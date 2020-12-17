@@ -13,7 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import com.jetbrains.handson.mpp.mobile.R
 import net.compoza.deactivator.activities.MainViewActivity
 import com.jetbrains.handson.mpp.mobile.databinding.FragmentEditServerBinding
-import kotlinx.android.synthetic.main.fragment_edit_server.*
 import kotlinx.coroutines.launch
 import net.compoza.deactivator.Utils
 import net.compoza.deactivator.mpp.base.myApp
@@ -25,6 +24,9 @@ const val EDIT_MODEL = "editModel"
 const val EDIT_MODEL_ID = "editModelId"
 
 open class EditServerFragment : Fragment() {
+    private var _viewBinding: FragmentEditServerBinding? = null
+    private val viewBinding get() = _viewBinding!!
+
     private val repository: ServersRepository by myApp.kodein.instance()
     private var serverFormViewModel = ServerFormViewModel()
     private var serverId: Long = 0
@@ -33,6 +35,9 @@ open class EditServerFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _viewBinding = FragmentEditServerBinding.inflate(inflater, container, false)
+        val view = viewBinding.root
+
         val binding : FragmentEditServerBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_server, container, false)
         binding.item = serverFormViewModel
 
@@ -81,7 +86,7 @@ open class EditServerFragment : Fragment() {
                     toMain()
                 }
             } else {
-                Utils.snackMsg(editView, getString(R.string.error_empty_field))
+                Utils.snackMsg(view, getString(R.string.error_empty_field))
             }
         }
 
@@ -103,14 +108,14 @@ open class EditServerFragment : Fragment() {
     }
 
     private fun saveRecord(viewModel: ServerFormViewModel) {
-        progressBar.visibility = View.VISIBLE
+        viewBinding.progressBar.visibility = View.VISIBLE
         try {
             repository.save(serverId, viewModel.getModel(serverId))
             toMain()
         } catch (e: Exception) {
-            Utils.snackMsg(editView, e.message.toString())
+            view?.let { Utils.snackMsg(it, e.message.toString()) }
         } finally {
-            progressBar.visibility = View.GONE
+            viewBinding.progressBar.visibility = View.GONE
         }
     }
 

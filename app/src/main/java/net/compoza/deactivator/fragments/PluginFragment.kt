@@ -9,14 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import com.jetbrains.handson.mpp.mobile.R
 import net.compoza.deactivator.activities.MainViewActivity
 import net.compoza.deactivator.adapters.PluginsAdapter
-import kotlinx.android.synthetic.main.fragment_plugin.*
-import kotlinx.android.synthetic.main.fragment_plugin.swipeContainer
-import kotlinx.android.synthetic.main.fragment_plugin.view.*
+import com.jetbrains.handson.mpp.mobile.databinding.FragmentPluginBinding
 import kotlinx.coroutines.launch
 import net.compoza.deactivator.Utils
 import net.compoza.deactivator.db.Server
@@ -26,6 +23,8 @@ import net.compoza.deactivator.mpp.repositories.ServersRepository
 import org.kodein.di.instance
 
 class PluginFragment : Fragment() {
+    private var _viewBinding: FragmentPluginBinding? = null
+    private val viewBinding get() = _viewBinding!!
 
     lateinit var currentServer: Server
     private var viewModel = PluginViewModel()
@@ -39,10 +38,10 @@ class PluginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_plugin, container, false)
-        viewModel = ViewModelProviders.of(this).get(PluginViewModel::class.java)
+        _viewBinding = FragmentPluginBinding.inflate(inflater, container, false)
+        val view = viewBinding.root
 
-        view.progressBar.visibility = View.VISIBLE
+        viewBinding.progressBar.visibility = View.VISIBLE
 
         if (arguments?.getLong("ID") != null) {
             serverId = arguments?.getLong("ID")!!
@@ -64,13 +63,13 @@ class PluginFragment : Fragment() {
         }
 
         // Refresh data
-        view.swipeContainer.setOnRefreshListener {
+        viewBinding.swipeContainer.setOnRefreshListener {
             viewModel.getInitList().addObserver {
                 adapter.refreshList(viewModel.pluginList)
             }
 
-            if (swipeContainer.isRefreshing) {
-                swipeContainer.isRefreshing = false
+            if (viewBinding.swipeContainer.isRefreshing) {
+                viewBinding.swipeContainer.isRefreshing = false
             }
         }
 
@@ -85,12 +84,12 @@ class PluginFragment : Fragment() {
         })
 
         viewModel.getStatus().addObserver {
-            view.plugins.adapter = adapter
+            viewBinding.plugins.adapter = adapter
             if (viewModel._status.value == "Error") {
                 toMain()
-                Utils.snackMsg(plugin_fragment_view, getString(R.string.server_error))
+                Utils.snackMsg(view, getString(R.string.server_error))
             } else if (viewModel._status.value == "Success") {
-                view.progressBar.visibility = View.GONE
+                viewBinding.progressBar.visibility = View.GONE
             }
         }
 
@@ -101,7 +100,7 @@ class PluginFragment : Fragment() {
         try {
             viewModel.launchAsyncRequest(currentServer)
         } catch (e: Exception) {
-            Utils.snackMsg(plugin_fragment_view, e.message.toString())
+            view?.let { Utils.snackMsg(it, e.message.toString()) }
             toMain()
         }
     }

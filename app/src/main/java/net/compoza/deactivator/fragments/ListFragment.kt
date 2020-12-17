@@ -6,13 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import com.jetbrains.handson.mpp.mobile.R
-import kotlinx.android.synthetic.main.fragment_list.*
-import kotlinx.android.synthetic.main.fragment_list.view.*
+import com.jetbrains.handson.mpp.mobile.databinding.FragmentListBinding
 import net.compoza.deactivator.adapters.ServersAdapter
 import kotlinx.coroutines.launch
 import net.compoza.deactivator.Utils
@@ -20,6 +17,9 @@ import net.compoza.deactivator.db.Server
 import net.compoza.deactivator.mpp.model.ListViewModel
 
 open class ListFragment : Fragment() {
+    private var _viewBinding: FragmentListBinding? = null
+    private val viewBinding get() = _viewBinding!!
+
     lateinit var transaction: FragmentTransaction
     lateinit var adapter: ServersAdapter
 
@@ -32,11 +32,12 @@ open class ListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProviders.of(this).get(ListViewModel::class.java)
-        val view = inflater.inflate(R.layout.fragment_list, container, false)
+
+        _viewBinding = FragmentListBinding.inflate(inflater, container, false)
+        val view = viewBinding.root
 
         lifecycleScope.launch {
-            view.progressBar.visibility = View.VISIBLE
+            viewBinding.progressBar.visibility = View.VISIBLE
             viewModel.getInitList()
         }.also {
             adapter = ServersAdapter(
@@ -49,8 +50,8 @@ open class ListFragment : Fragment() {
                         transaction.replace(R.id.fragment_list_view, pluginFragment)
                         transaction.disallowAddToBackStack()
                         transaction.commit()
-                        view.servers_item.isVisible = false
-                        view.fab.isVisible = false
+                        viewBinding.serversItem.visibility = View.GONE
+                        viewBinding.fab.visibility = View.GONE
                     }
                 },
                 object : ServersAdapter.EditClickCallback {
@@ -61,8 +62,8 @@ open class ListFragment : Fragment() {
                         transaction.replace(R.id.fragment_list_view, editServerFragment)
                         transaction.disallowAddToBackStack()
                         transaction.commit()
-                        view.servers_item.isVisible = false
-                        view.fab.isVisible = false
+                        viewBinding.serversItem.visibility = View.GONE
+                        viewBinding.fab.visibility = View.GONE
                     }
                 },
                 object :
@@ -75,7 +76,7 @@ open class ListFragment : Fragment() {
                                 viewModel.delete(item)
                                 viewModel.reload()
                                 adapter.notifyDataSetChanged()
-                                Utils.snackMsg(fragment_list_view, getString(R.string.deleted))
+                                Utils.snackMsg(view, getString(R.string.deleted))
                             }
                             .setNegativeButton(R.string.no) { _, _ ->
                                 // nothing to do
@@ -84,32 +85,31 @@ open class ListFragment : Fragment() {
                     }
                 })
 
-            view.servers_item.adapter = adapter
-            view.progressBar.visibility = View.GONE
+            viewBinding.serversItem.adapter = adapter
+            viewBinding.progressBar.visibility = View.GONE
         }
 
         viewModel.getInitList().addObserver {
             adapter.refreshList(it)
         }
 
-        view.swipeContainer.setOnRefreshListener {
+        viewBinding.swipeContainer.setOnRefreshListener {
             viewModel.reload()
             adapter.items = viewModel.list
             adapter.notifyDataSetChanged()
-            if (view.swipeContainer.isRefreshing) {
-                view.swipeContainer.isRefreshing = false
+            if (viewBinding.swipeContainer.isRefreshing) {
+                viewBinding.swipeContainer.isRefreshing = false
             }
         }
 
-        view.fab.setOnClickListener {
+        viewBinding.fab.setOnClickListener {
             transaction = activity!!.supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_list_view, EditServerFragment())
             transaction.disallowAddToBackStack()
             transaction.commit()
-            view.servers_item.isVisible = false
-            view.fab.isVisible = false
+            viewBinding.serversItem.visibility = View.GONE
+            viewBinding.fab.visibility = View.GONE
         }
-
         return view
     }
 }
