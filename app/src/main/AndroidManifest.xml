@@ -12,7 +12,8 @@
         android:roundIcon="@drawable/app_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="net.compoza.deactivator.activities.SplashscreenActivity"
+        <activity
+            android:name="net.compoza.deactivator.activities.SplashscreenActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

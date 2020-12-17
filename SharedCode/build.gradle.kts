@@ -48,12 +48,12 @@ kotlin {
 //    }
 
     sourceSets["commonMain"].dependencies {
+        api("dev.icerock.moko:mvvm:0.8.1")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-common")
         implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:1.0-M1-1.4.0-rc")
-        implementation("org.kodein.di:kodein-di:7.0.0")
-        implementation("io.ktor:ktor-client-core:1.3.2")
-        api("dev.icerock.moko:mvvm:0.7.0")
-        implementation("com.squareup.sqldelight:runtime:1.4.3")
+        implementation("org.kodein.di:kodein-di:7.1.0")
+        implementation("io.ktor:ktor-client-core:1.4.0")
+        implementation("com.squareup.sqldelight:runtime:1.4.4")
         implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     }
 
@@ -64,16 +64,16 @@ kotlin {
 //        implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
 
         implementation("org.jetbrains.kotlin:kotlin-stdlib")
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
-        implementation("com.squareup.sqldelight:android-driver:1.4.3")
-        implementation("io.ktor:ktor-client-android:1.3.2")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
+        implementation("com.squareup.sqldelight:android-driver:1.4.4")
+        implementation("io.ktor:ktor-client-android:1.4.0")
     }
 
     sourceSets["iosMain"].dependencies {
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-native:1.3.7")
-        implementation("com.squareup.sqldelight:native-driver:1.4.3")
-        implementation("io.ktor:ktor-client-ios:1.3.2")
+        implementation("com.squareup.sqldelight:native-driver:1.4.4")
+        implementation("io.ktor:ktor-client-ios:1.4.0")
         implementation("io.ktor:ktor-client-core-native:1.3.2")
     }
 }

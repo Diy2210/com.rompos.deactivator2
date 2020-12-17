@@ -12,8 +12,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import com.jetbrains.handson.mpp.mobile.R
 import kotlinx.android.synthetic.main.fragment_list.*
-import net.compoza.deactivator.adapters.ServersAdapter
 import kotlinx.android.synthetic.main.fragment_list.view.*
+import net.compoza.deactivator.adapters.ServersAdapter
 import kotlinx.coroutines.launch
 import net.compoza.deactivator.Utils
 import net.compoza.deactivator.db.Server

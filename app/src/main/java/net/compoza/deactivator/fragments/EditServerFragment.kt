@@ -19,7 +19,7 @@ import net.compoza.deactivator.Utils
 import net.compoza.deactivator.mpp.base.myApp
 import net.compoza.deactivator.mpp.model.ServerFormViewModel
 import net.compoza.deactivator.mpp.repositories.ServersRepository
-import org.kodein.di.erased.instance
+import org.kodein.di.instance
 
 const val EDIT_MODEL = "editModel"
 const val EDIT_MODEL_ID = "editModelId"
